@@ -20,6 +20,8 @@ interface FormElement {
   type: string;
   label: string;
   schema: string;
+  element: string;
+  qualifier: string;
   description: string;
   inputType: string;
   repeatable: boolean;
@@ -48,6 +50,8 @@ export default function RowBasedFormBuilder() {
         type: baseElement?.type || 'input',
         label: baseElement?.label || 'New Element',
         schema: '',
+        element: '',
+        qualifier: '',
         description: '',
         inputType: '',
         repeatable: false,
@@ -124,53 +128,24 @@ export default function RowBasedFormBuilder() {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex h-screen">
-        <div className="w-1/4 bg-gray-100 p-4">
-          <h2 className="text-lg font-bold mb-4">Form Elements</h2>
-          <Droppable droppableId="elements">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {initialFormElements.map((element, index) => (
-                  <Draggable key={element.id} draggableId={element.id} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="bg-white p-2 mb-2 rounded shadow"
-                      >
-                        {element.label}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </div>
-        <div className="w-2/4 p-4">
-          <h2 className="text-lg font-bold mb-4">Form Preview</h2>
-          {form.map((row, rowIndex) => (
-            <Droppable key={row.id} droppableId={`row-${rowIndex}`} direction="horizontal">
+    <div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex h-screen">
+          <div className="w-1/4 bg-gray-100 p-4">
+            <h2 className="text-lg font-bold mb-4">Form Elements</h2>
+            <Droppable droppableId="elements">
               {(provided) => (
-                <div 
-                  {...provided.droppableProps} 
-                  ref={provided.innerRef} 
-                  className="flex flex-wrap auto-cols-max min-h-[50px] border-2 border-dashed p-2 mb-2"
-                >
-                  {row.elements.map((element, index) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {initialFormElements.map((element, index) => (
                     <Draggable key={element.id} draggableId={element.id} index={index}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          onClick={() => handleElementClick(element)}
-                          className={`flex-1 cursor-pointer m-1 ${selectedElement?.id === element.id ? 'border-2 border-blue-500' : ''}`}
+                          className="bg-white p-2 mb-2 rounded shadow"
                         >
-                          {renderFormElement(element)}
+                          {element.label}
                         </div>
                       )}
                     </Draggable>
@@ -179,76 +154,124 @@ export default function RowBasedFormBuilder() {
                 </div>
               )}
             </Droppable>
-          ))}
-          <Button className="mt-4 mr-2" onClick={addNewRow}>
-            <PlusIcon className="mr-2 h-4 w-4" /> Add Row
-          </Button>
-          <Button className="mt-4" onClick={() => console.log(form)}>Save Form</Button>
+          </div>
+          <div className="w-2/4 p-4">
+            <h2 className="text-lg font-bold mb-4">Form Preview</h2>
+            {form.map((row, rowIndex) => (
+              <Droppable key={row.id} droppableId={`row-${rowIndex}`} direction="horizontal">
+                {(provided) => (
+                  <div 
+                    {...provided.droppableProps} 
+                    ref={provided.innerRef} 
+                    className="flex flex-wrap auto-cols-max min-h-[50px] border-2 border-dashed p-2 mb-2"
+                  >
+                    {row.elements.map((element, index) => (
+                      <Draggable key={element.id} draggableId={element.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            onClick={() => handleElementClick(element)}
+                            className={`flex-1 cursor-pointer m-1 ${selectedElement?.id === element.id ? 'border-2 border-blue-500' : ''}`}
+                          >
+                            {renderFormElement(element)}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            ))}
+            <Button className="mt-4 mr-2" onClick={addNewRow}>
+              <PlusIcon className="mr-2 h-4 w-4" /> Add Row
+            </Button>
+            <Button className="mt-4" onClick={() => console.log(form)}>Save Form</Button>
+          </div>
+          <div className="w-1/4 bg-gray-100 p-4">
+            <h2 className="text-lg font-bold mb-4">Element Properties</h2>
+            {selectedElement && (
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="schema">Schema</Label>
+                  <Input 
+                    id="schema" 
+                    value={selectedElement.schema} 
+                    onChange={(e) => handlePropertyChange('schema', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="element">Element</Label>
+                  <Input 
+                    id="element" 
+                    value={selectedElement.element} 
+                    onChange={(e) => handlePropertyChange('element', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="qualifier">Qualifier</Label>
+                  <Input 
+                    id="qualifier" 
+                    value={selectedElement.qualifier} 
+                    onChange={(e) => handlePropertyChange('qualifier', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="description">Description</Label>
+                  <Input 
+                    id="description" 
+                    value={selectedElement.description} 
+                    onChange={(e) => handlePropertyChange('description', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="label">Label</Label>
+                  <Input 
+                    id="label" 
+                    value={selectedElement.label} 
+                    onChange={(e) => handlePropertyChange('label', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="inputType">Input Type</Label>
+                  <Input 
+                    id="inputType" 
+                    value={selectedElement.inputType} 
+                    onChange={(e) => handlePropertyChange('inputType', e.target.value)}
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="repeatable" 
+                    checked={selectedElement.repeatable} 
+                    onCheckedChange={(checked) => handlePropertyChange('repeatable', checked)}
+                  />
+                  <Label htmlFor="repeatable">Repeatable</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="required" 
+                    checked={selectedElement.required} 
+                    onCheckedChange={(checked) => handlePropertyChange('required', checked)}
+                  />
+                  <Label htmlFor="required">Required</Label>
+                </div>
+                <div>
+                  <Label htmlFor="hint">Hint</Label>
+                  <Input 
+                    id="hint" 
+                    value={selectedElement.hint} 
+                    onChange={(e) => handlePropertyChange('hint', e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="w-1/4 bg-gray-100 p-4">
-          <h2 className="text-lg font-bold mb-4">Element Properties</h2>
-          {selectedElement && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="schema">Schema</Label>
-                <Input 
-                  id="schema" 
-                  value={selectedElement.schema} 
-                  onChange={(e) => handlePropertyChange('schema', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Input 
-                  id="description" 
-                  value={selectedElement.description} 
-                  onChange={(e) => handlePropertyChange('description', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="label">Label</Label>
-                <Input 
-                  id="label" 
-                  value={selectedElement.label} 
-                  onChange={(e) => handlePropertyChange('label', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="inputType">Input Type</Label>
-                <Input 
-                  id="inputType" 
-                  value={selectedElement.inputType} 
-                  onChange={(e) => handlePropertyChange('inputType', e.target.value)}
-                />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="repeatable" 
-                  checked={selectedElement.repeatable} 
-                  onCheckedChange={(checked) => handlePropertyChange('repeatable', checked)}
-                />
-                <Label htmlFor="repeatable">Repeatable</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="required" 
-                  checked={selectedElement.required} 
-                  onCheckedChange={(checked) => handlePropertyChange('required', checked)}
-                />
-                <Label htmlFor="required">Required</Label>
-              </div>
-              <div>
-                <Label htmlFor="hint">Hint</Label>
-                <Input 
-                  id="hint" 
-                  value={selectedElement.hint} 
-                  onChange={(e) => handlePropertyChange('hint', e.target.value)}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </DragDropContext>
+      </DragDropContext>
+
+    </div>
   )
 }
