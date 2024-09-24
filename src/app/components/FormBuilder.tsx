@@ -42,9 +42,11 @@ export default function RowBasedFormBuilder() {
     const { source, destination } = result
 
     if (source.droppableId === 'elements' && destination.droppableId.startsWith('row')) {
+      const baseElement = initialFormElements.find(el => el.id === result.draggableId);
       const newElement: FormElement = {
-        ...initialFormElements.find(el => el.id === result.draggableId),
         id: `${result.draggableId}-${Date.now()}`,
+        type: baseElement?.type || 'input',
+        label: baseElement?.label || 'New Element',
         schema: '',
         description: '',
         inputType: '',
