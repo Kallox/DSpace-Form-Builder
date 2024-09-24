@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { PlusIcon } from 'lucide-react'
+import { CodeZone } from "./CodeZone"
 
 const initialFormElements = [
   { id: 'input', type: 'input', label: 'Text Input' },
@@ -37,6 +38,7 @@ interface FormRow {
 export default function RowBasedFormBuilder() {
   const [form, setForm] = useState<FormRow[]>([])
   const [selectedElement, setSelectedElement] = useState<FormElement | null>(null)
+  const [savedForm, setSavedForm] = useState<FormRow[] | null>(null)
 
   const onDragEnd = (result) => {
     if (!result.destination) return
@@ -127,6 +129,10 @@ export default function RowBasedFormBuilder() {
     setForm([...form, { id: `row-${Date.now()}`, elements: [] }])
   }
 
+  const handleSaveForm = () => {
+    setSavedForm([...form])
+  }
+
   return (
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -188,7 +194,8 @@ export default function RowBasedFormBuilder() {
             <Button className="mt-4 mr-2" onClick={addNewRow}>
               <PlusIcon className="mr-2 h-4 w-4" /> Add Row
             </Button>
-            <Button className="mt-4" onClick={() => console.log(form)}>Save Form</Button>
+            <Button className="mt-4" onClick={handleSaveForm}>Save Form</Button>
+            {savedForm && <CodeZone data={savedForm} />}
           </div>
           <div className="w-1/4 bg-gray-100 p-4">
             <h2 className="text-lg font-bold mb-4">Element Properties</h2>
