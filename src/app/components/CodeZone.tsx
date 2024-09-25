@@ -59,7 +59,7 @@ export function CodeZone({ data, title }: JSONViewerProps) {
 
   return (
     <div className="mt-4">
-      <h2 className="text-lg font-bold mb-2">Form JSON</h2>
+      <h2 className="text-lg font-bold mb-2">Form XML</h2>
       <div className="border rounded overflow-hidden">
         <SyntaxHighlighter language="xml" style={vscDarkPlus} customStyle={{margin: 0}}>
           {xml}

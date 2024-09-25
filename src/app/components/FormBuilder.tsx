@@ -10,9 +10,17 @@ import { PlusCircle } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 
 const initialFormElements = [
-  { id: 'input', type: 'input', label: 'Text Input' },
+  { id: 'input', type: 'onebox', label: 'Text' },
   { id: 'textarea', type: 'textarea', label: 'Text Area' },
-  { id: 'select', type: 'select', label: 'Select' },
+  { id: 'select', type: 'dropdown', label: 'Select' },
+  { id: 'date', type: 'date', label: 'Date' },
+  { id: 'tag', type: 'tag', label: 'Tag' },
+  { id: 'group', type: 'group', label: 'Modal' },
+  { id: 'inlinegroup', type: 'inline-group', label: 'Inline form' },
+  { id: 'name', type: 'name', label: 'Person Name' },
+  { id: 'link', type: 'link', label: 'Link' },
+  { id: 'series', type: 'series', label: 'Publication Series' },
+
 ]
 
 interface FormElement {
