@@ -5,10 +5,8 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import { PlusIcon } from 'lucide-react'
-import { CodeZone } from "./CodeZone"
+import { PlusCircle } from 'lucide-react'
 
 const initialFormElements = [
   { id: 'input', type: 'input', label: 'Text Input' },
@@ -18,12 +16,10 @@ const initialFormElements = [
 
 interface FormElement {
   id: string;
-  type: string;
-  label: string;
   schema: string;
   element: string;
   qualifier: string;
-  description: string;
+  label: string
   inputType: string;
   repeatable: boolean;
   required: boolean;
@@ -35,10 +31,9 @@ interface FormRow {
   elements: FormElement[];
 }
 
-export default function RowBasedFormBuilder() {
+export default function EnhancedFormBuilder() {
   const [form, setForm] = useState<FormRow[]>([])
   const [selectedElement, setSelectedElement] = useState<FormElement | null>(null)
-  const [savedForm, setSavedForm] = useState<FormRow[] | null>(null)
 
   const onDragEnd = (result) => {
     if (!result.destination) return
@@ -49,13 +44,11 @@ export default function RowBasedFormBuilder() {
       const baseElement = initialFormElements.find(el => el.id === result.draggableId);
       const newElement: FormElement = {
         id: `${result.draggableId}-${Date.now()}`,
-        type: baseElement?.type || 'input',
-        label: baseElement?.label || 'New Element',
         schema: '',
         element: '',
         qualifier: '',
-        description: '',
-        inputType: '',
+        label: baseElement.label,
+        inputType: baseElement.type,
         repeatable: false,
         required: false,
         hint: ''
@@ -79,97 +72,150 @@ export default function RowBasedFormBuilder() {
   }
 
   const renderFormElement = (element: FormElement) => {
-    switch (element.type) {
-      case 'input':
-        return (
-          <div className="mb-4">
-            <Label htmlFor={element.id}>{element.label}</Label>
-            <Input id={element.id} placeholder="Enter text"  hint={element.hint}/>
+    return (
+      <div className="w-full p-4 border rounded-md mb-4 bg-white">
+        <div className="flex flex-wrap items-center space-x-2">
+          <div className="flex-1 min-w-[120px]">
+            <Label htmlFor={`${element.id}-schema`} className="sr-only">Schema</Label>
+            <Input
+              id={`${element.id}-schema`}
+              value={element.schema}
+              onChange={(e) => handlePropertyChange(element.id, 'schema', e.target.value)}
+              className="w-full"
+              placeholder="Schema"
+            />
           </div>
-        )
-      case 'textarea':
-        return (
-          <div className="mb-4">
-            <Label htmlFor={element.id}>{element.label}</Label>
-            <Textarea id={element.id} placeholder="Enter long text" />
+          <div className="flex-1 min-w-[120px]">
+            <Label htmlFor={`${element.id}-element`} className="sr-only">Element</Label>
+            <Input
+              id={`${element.id}-element`}
+              value={element.element}
+              onChange={(e) => handlePropertyChange(element.id, 'element', e.target.value)}
+              className="w-full"
+              placeholder="Element"
+            />
           </div>
-        )
-      case 'select':
-        return (
-          <div className="mb-4">
-            <Label htmlFor={element.id}>{element.label}</Label>
-            <select id={element.id} className="w-full p-2 border rounded">
-              <option>Option 1</option>
-              <option>Option 2</option>
-              <option>Option 3</option>
-            </select>
+          <div className="flex-1 min-w-[120px]">
+            <Label htmlFor={`${element.id}-qualifier`} className="sr-only">Qualifier</Label>
+            <Input
+              id={`${element.id}-qualifier`}
+              value={element.qualifier}
+              onChange={(e) => handlePropertyChange(element.id, 'qualifier', e.target.value)}
+              className="w-full"
+              placeholder="Qualifier"
+            />
           </div>
-        )
-      default:
-        return null
-    }
+          <div className="flex-1 min-w-[120px]">
+            <Label htmlFor={`${element.id}-label`} className="sr-only">Label</Label>
+            <Input
+              id={`${element.id}-label`}
+              value={element.label}
+              onChange={(e) => handlePropertyChange(element.id, 'label', e.target.value)}
+              className="w-full"
+              placeholder="Label"
+            />
+          </div>
+          <div className="flex-1 min-w-[120px]">
+            <Label htmlFor={`${element.id}-inputType`} className="sr-only">Input Type</Label>
+            <Input
+              id={`${element.id}-inputType`}
+              value={element.inputType}
+              onChange={(e) => handlePropertyChange(element.id, 'inputType', e.target.value)}
+              className="w-full"
+              placeholder="Input Type"
+            />
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id={`${element.id}-repeatable`}
+              checked={element.repeatable}
+              onCheckedChange={(checked) => handlePropertyChange(element.id, 'repeatable', checked)}
+            />
+            <Label htmlFor={`${element.id}-repeatable`} className="text-sm">Repeatable</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id={`${element.id}-required`}
+              checked={element.required}
+              onCheckedChange={(checked) => handlePropertyChange(element.id, 'required', checked)}
+            />
+            <Label htmlFor={`${element.id}-required`} className="text-sm">Required</Label>
+          </div>
+          <div className="flex-1 min-w-[120px]">
+            <Label htmlFor={`${element.id}-hint`} className="sr-only">Hint</Label>
+            <Input
+              id={`${element.id}-hint`}
+              value={element.hint}
+              onChange={(e) => handlePropertyChange(element.id, 'hint', e.target.value)}
+              className="w-full"
+              placeholder="Hint"
+            />
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const handleElementClick = (element: FormElement) => {
     setSelectedElement(element)
   }
 
-  const handlePropertyChange = (property: string, value: string | boolean) => {
-    if (selectedElement) {
-      const updatedElement = { ...selectedElement, [property]: value }
-      setSelectedElement(updatedElement)
-      setForm(form.map(row => ({
-        ...row,
-        elements: row.elements.map(el => el.id === updatedElement.id ? updatedElement : el)
-      })))
-    }
+  const handlePropertyChange = (elementId: string, property: string, value: string | boolean) => {
+    setForm(prevForm => prevForm.map(row => ({
+      ...row,
+      elements: row.elements.map(el => 
+        el.id === elementId ? { ...el, [property]: value } : el
+      )
+    })))
   }
 
   const addNewRow = () => {
-    setForm([...form, { id: `row-${Date.now()}`, elements: [] }])
-  }
-
-  const handleSaveForm = () => {
-    setSavedForm([...form])
+    setForm(prevForm => [...prevForm, { id: `row-${Date.now()}`, elements: [] }])
   }
 
   return (
-    <div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex h-screen">
-          <div className="w-1/4 bg-gray-100 p-4">
-            <h2 className="text-lg font-bold mb-4">Form Elements</h2>
-            <Droppable droppableId="elements">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {initialFormElements.map((element, index) => (
-                    <Draggable key={element.id} draggableId={element.id} index={index}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="bg-white p-2 mb-2 rounded shadow"
-                        >
-                          {element.label}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="flex h-screen">
+        <div className="w-1/5 bg-gray-100 p-4">
+          <h2 className="text-lg font-bold mb-4">Form Elements</h2>
+          <Droppable droppableId="elements" isDropDisabled={true}>
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {initialFormElements.map((element, index) => (
+                  <Draggable key={element.id} draggableId={element.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="bg-white p-2 mb-2 rounded shadow"
+                      >
+                        {element.label}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </div>
+        <div className="w-4/5 p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Form Preview</h2>
+            <Button onClick={addNewRow} className="flex items-center">
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Row
+            </Button>
           </div>
-          <div className="w-2/4 p-4">
-            <h2 className="text-lg font-bold mb-4">Form Preview</h2>
-            {form.map((row, rowIndex) => (
-              <Droppable key={row.id} droppableId={`row-${rowIndex}`} direction="horizontal">
-                {(provided) => (
-                  <div 
-                    {...provided.droppableProps} 
-                    ref={provided.innerRef} 
-                    className="flex flex-wrap auto-cols-max min-h-[50px] border-2 border-dashed p-2 mb-2"
+          {form.map((row, rowIndex) => (
+            <Droppable key={row.id} droppableId={`row-${rowIndex}`}>
+              {(provided) => (
+                <div className="relative min-h-[100px] border-2 border-dashed p-4 mb-4">
+                  <span className="absolute top-0 left-0 bg-gray-200 text-xs px-2 py-1 rounded-br">Row</span>
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="min-h-[100px]"
                   >
                     {row.elements.map((element, index) => (
                       <Draggable key={element.id} draggableId={element.id} index={index}>
@@ -179,7 +225,7 @@ export default function RowBasedFormBuilder() {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             onClick={() => handleElementClick(element)}
-                            className={`flex-1 cursor-pointer m-1 ${selectedElement?.id === element.id ? 'border-2 border-blue-500' : ''}`}
+                            className={`cursor-pointer mt-4 ${selectedElement?.id === element.id ? 'border-2 border-blue-500' : ''}`}
                           >
                             {renderFormElement(element)}
                           </div>
@@ -188,97 +234,13 @@ export default function RowBasedFormBuilder() {
                     ))}
                     {provided.placeholder}
                   </div>
-                )}
-              </Droppable>
-            ))}
-            <Button className="mt-4 mr-2" onClick={addNewRow}>
-              <PlusIcon className="mr-2 h-4 w-4" /> Add Row
-            </Button>
-            <Button className="mt-4" onClick={handleSaveForm}>Save Form</Button>
-            {savedForm && <CodeZone data={savedForm} />}
-          </div>
-          <div className="w-1/4 bg-gray-100 p-4">
-            <h2 className="text-lg font-bold mb-4">Element Properties</h2>
-            {selectedElement && (
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="schema">Schema</Label>
-                  <Input 
-                    id="schema" 
-                    value={selectedElement.schema} 
-                    onChange={(e) => handlePropertyChange('schema', e.target.value)}
-                  />
                 </div>
-                <div>
-                  <Label htmlFor="element">Element</Label>
-                  <Input 
-                    id="element" 
-                    value={selectedElement.element} 
-                    onChange={(e) => handlePropertyChange('element', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="qualifier">Qualifier</Label>
-                  <Input 
-                    id="qualifier" 
-                    value={selectedElement.qualifier} 
-                    onChange={(e) => handlePropertyChange('qualifier', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Input 
-                    id="description" 
-                    value={selectedElement.description} 
-                    onChange={(e) => handlePropertyChange('description', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="label">Label</Label>
-                  <Input 
-                    id="label" 
-                    value={selectedElement.label} 
-                    onChange={(e) => handlePropertyChange('label', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="inputType">Input Type</Label>
-                  <Input 
-                    id="inputType" 
-                    value={selectedElement.inputType} 
-                    onChange={(e) => handlePropertyChange('inputType', e.target.value)}
-                  />
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="repeatable" 
-                    checked={selectedElement.repeatable} 
-                    onCheckedChange={(checked) => handlePropertyChange('repeatable', checked)}
-                  />
-                  <Label htmlFor="repeatable">Repeatable</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="required" 
-                    checked={selectedElement.required} 
-                    onCheckedChange={(checked) => handlePropertyChange('required', checked)}
-                  />
-                  <Label htmlFor="required">Required</Label>
-                </div>
-                <div>
-                  <Label htmlFor="hint">Hint</Label>
-                  <Input 
-                    id="hint" 
-                    value={selectedElement.hint} 
-                    onChange={(e) => handlePropertyChange('hint', e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </Droppable>
+          ))}
+          <Button className="mt-4" onClick={() => console.log(JSON.stringify(form, null, 2))}>Save Form</Button>
         </div>
-      </DragDropContext>
-
-    </div>
+      </div>
+    </DragDropContext>
   )
 }
