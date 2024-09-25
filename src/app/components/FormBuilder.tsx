@@ -47,8 +47,8 @@ export default function EnhancedFormBuilder() {
         schema: '',
         element: '',
         qualifier: '',
-        label: baseElement.label,
-        inputType: baseElement.type,
+        label: baseElement ? baseElement.label : '',
+        inputType: baseElement ? baseElement.type : '',
         repeatable: false,
         required: false,
         hint: ''
