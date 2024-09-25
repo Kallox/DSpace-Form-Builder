@@ -1,6 +1,7 @@
 import React from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { CopyButton } from './CopyButton'
 
 interface FormElement {
   id: string;
@@ -60,7 +61,8 @@ export function CodeZone({ data, title }: JSONViewerProps) {
   return (
     <div className="mt-4">
       <h2 className="text-lg font-bold mb-2">Form XML</h2>
-      <div className="border rounded overflow-hidden">
+      <div className="border rounded overflow-hidden relative">
+        <CopyButton code={xml} />
         <SyntaxHighlighter language="xml" style={vscDarkPlus} customStyle={{margin: 0}}>
           {xml}
         </SyntaxHighlighter>
