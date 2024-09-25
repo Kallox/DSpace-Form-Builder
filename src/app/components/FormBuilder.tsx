@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { PlusCircle } from 'lucide-react'
+import { CodeZone } from "./CodeZone"
 
 const initialFormElements = [
   { id: 'input', type: 'input', label: 'Text Input' },
@@ -22,7 +23,7 @@ interface FormElement {
   label: string
   inputType: string;
   repeatable: boolean;
-  required: boolean;
+  required: string;
   hint: string;
 }
 
@@ -34,6 +35,8 @@ interface FormRow {
 export default function EnhancedFormBuilder() {
   const [form, setForm] = useState<FormRow[]>([])
   const [selectedElement, setSelectedElement] = useState<FormElement | null>(null)
+  const [savedForm, setSavedForm] = useState<FormRow[] | null>(null)
+  const [formName, setFormName] = useState<string>('Form Name')
 
   const onDragEnd = (result) => {
     if (!result.destination) return
@@ -47,10 +50,10 @@ export default function EnhancedFormBuilder() {
         schema: '',
         element: '',
         qualifier: '',
-        label: baseElement ? baseElement.label : '',
+        label: '',
         inputType: baseElement ? baseElement.type : '',
         repeatable: false,
-        required: false,
+        required: '',
         hint: ''
       }
       
@@ -134,12 +137,13 @@ export default function EnhancedFormBuilder() {
             <Label htmlFor={`${element.id}-repeatable`} className="text-sm">Repeatable</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <Checkbox
+            <Input
               id={`${element.id}-required`}
-              checked={element.required}
-              onCheckedChange={(checked) => handlePropertyChange(element.id, 'required', checked)}
+              value={element.required}
+              onChange={(e) => handlePropertyChange(element.id, 'required', e.target.value)}
+              className="w-full"
+              placeholder="Required"
             />
-            <Label htmlFor={`${element.id}-required`} className="text-sm">Required</Label>
           </div>
           <div className="flex-1 min-w-[120px]">
             <Label htmlFor={`${element.id}-hint`} className="sr-only">Hint</Label>
@@ -159,6 +163,10 @@ export default function EnhancedFormBuilder() {
   const handleElementClick = (element: FormElement) => {
     setSelectedElement(element)
   }
+
+const handleSavedForm = () => {
+  setSavedForm([...form])
+}
 
   const handlePropertyChange = (elementId: string, property: string, value: string | boolean) => {
     setForm(prevForm => prevForm.map(row => ({
@@ -202,7 +210,13 @@ export default function EnhancedFormBuilder() {
         </div>
         <div className="w-4/5 p-4">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Form Preview</h2>
+            <Input
+              id="FormName"
+              value={formName}
+              onChange={(e) => setFormName(e.target.value)}
+              className="text-lg font-bold border-none bg-transparent"
+              placeholder="Enter Form Name"
+            />
             <Button onClick={addNewRow} className="flex items-center">
               <PlusCircle className="mr-2 h-4 w-4" /> Add Row
             </Button>
@@ -238,7 +252,8 @@ export default function EnhancedFormBuilder() {
               )}
             </Droppable>
           ))}
-          <Button className="mt-4" onClick={() => console.log(JSON.stringify(form, null, 2))}>Save Form</Button>
+          <Button className="mt-4" onClick={handleSavedForm}>Save Form</Button>
+          {savedForm && <CodeZone data={savedForm} title={formName}/>}
         </div>
       </div>
     </DragDropContext>
