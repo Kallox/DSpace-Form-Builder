@@ -78,7 +78,7 @@ export default function EnhancedFormBuilder() {
 
   const renderFormElement = (element: FormElement) => {
     return (
-      <div className="w-full p-4 border rounded-md mb-4 bg-white">
+      <div className="w-full p-4 border rounded-md bg-white">
         <div className="flex flex-wrap items-center space-x-2">
           <div className="flex-1 min-w-[120px]">
             <Label htmlFor={`${element.id}-schema`} className="sr-only">Schema</Label>
