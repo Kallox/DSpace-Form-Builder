@@ -187,10 +187,6 @@ const handleSavedForm = () => {
     setFormName(jsonForm.name)
   }
   
-  const handleElementSettingsClick = (element: FormElement) => {
-    console.log('Settings clicked', element)
-  }
-
   const addNewRow = () => {
     setForm(prevForm => [...prevForm, { id: `row-${Date.now()}`, elements: [] }])
   }

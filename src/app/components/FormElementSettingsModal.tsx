@@ -14,7 +14,7 @@ import { validateXmlStructure } from "@/utils/xmlValidator"
 import { convertXmlToJson } from "@/utils/xmlToJsonConverter"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Settings } from "lucide-react"
-import { FormElement, FormRow, Form } from '@/types/Form'
+import { FormElement, Form } from '@/types/Form'
 
 interface XmlUploadModalProps {
   onUpload: (jsonForm: Form) => void,
