@@ -26,11 +26,16 @@ const initialFormElements = [
 
 ]
 
-export default function EnhancedFormBuilder() {
-  const [form, setForm] = useState<FormRow[]>([])
+interface FormBuilderProps {
+  form: FormRow[];
+  formName: string;
+  onFormChange: (newForm: FormRow[]) => void;
+  onFormNameChange: (newName: string) => void;
+}
+
+export default function EnhancedFormBuilder({ form, formName, onFormChange, onFormNameChange }: FormBuilderProps) {
   const [selectedElement, setSelectedElement] = useState<FormElement | null>(null)
   const [savedForm, setSavedForm] = useState<FormRow[] | null>(null)
-  const [formName, setFormName] = useState<string>('Form Name')
 
   const onDragEnd = (result) => {
     if (!result.destination) return
@@ -62,7 +67,7 @@ export default function EnhancedFormBuilder() {
       const rowIndex = parseInt(destination.droppableId.split('-')[1])
       const newForm = [...form]
       newForm[rowIndex].elements.splice(destination.index, 0, newElement)
-      setForm(newForm)
+      onFormChange(newForm)
     } else if (source.droppableId.startsWith('row') && destination.droppableId.startsWith('row')) {
       const sourceRowIndex = parseInt(source.droppableId.split('-')[1])
       const destRowIndex = parseInt(destination.droppableId.split('-')[1])
@@ -72,7 +77,7 @@ export default function EnhancedFormBuilder() {
       newForm[destRowIndex].elements.splice(destination.index, 0, movedElement)
       
       // Remove empty rows
-      setForm(newForm.filter(row => row.elements.length > 0))
+      onFormChange(newForm.filter(row => row.elements.length > 0))
     }
   }
 
@@ -174,30 +179,32 @@ const handleSavedForm = () => {
 }
 
   const handlePropertyChange = (elementId: string, property: string, value: string | boolean) => {
-    setForm(prevForm => prevForm.map(row => ({
+    const newForm = form.map(row => ({
       ...row,
       elements: row.elements.map(el => 
         el.id === elementId ? { ...el, [property]: value } : el
       )
-    })))
+    }))
+    onFormChange(newForm)
   }
 
   const handleXmlUpload = (jsonForm: Form) => {
-    setForm(jsonForm.rows)
-    setFormName(jsonForm.name)
+    onFormChange(jsonForm.rows)
+    onFormNameChange(jsonForm.name)
   }
 
   const handleElementSettingsSave = (element: FormElement) => {
-    setForm(prevForm => prevForm.map(row => ({
+    const newForm = form.map(row => ({
       ...row,
       elements: row.elements.map(el => 
         el.id === element.id ? element : el
       )
-    })))
+    }))
+    onFormChange(newForm)
   }
   
   const addNewRow = () => {
-    setForm(prevForm => [...prevForm, { id: `row-${Date.now()}`, elements: [] }])
+    onFormChange([...form, { id: `row-${Date.now()}`, elements: [] }])
   }
 
   return (
@@ -232,7 +239,7 @@ const handleSavedForm = () => {
             <Input
               id="FormName"
               value={formName}
-              onChange={(e) => setFormName(e.target.value)}
+              onChange={(e) => onFormNameChange(e.target.value)}
               className="text-lg font-bold border-dashed bg-transparent"
               placeholder="Enter Form Name"
             />
