@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { validateXmlStructure } from "@/utils/xmlValidator"
 import { convertXmlToJson } from "@/utils/xmlToJsonConverter"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, FileUp } from "lucide-react"
 import { Form } from '@/types/Form'
 
 interface XmlUploadModalProps {
@@ -44,7 +44,7 @@ export function XmlUploadModal({ onUpload }: XmlUploadModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Upload Form</Button>
+        <Button><FileUp className="h-4 h-4 mr-2"/>Upload Form</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

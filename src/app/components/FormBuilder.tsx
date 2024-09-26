@@ -158,7 +158,7 @@ export default function EnhancedFormBuilder() {
             />
           </div>
           <div className="flex items-center space-x-2">
-            <FormElementSettingsModal onUpload={handleXmlUpload} element={element}/>
+            <FormElementSettingsModal onSave={handleElementSettingsSave} element={element}/>
           </div>
         </div>
       </div>
@@ -185,6 +185,15 @@ const handleSavedForm = () => {
   const handleXmlUpload = (jsonForm: Form) => {
     setForm(jsonForm.rows)
     setFormName(jsonForm.name)
+  }
+
+  const handleElementSettingsSave = (element: FormElement) => {
+    setForm(prevForm => prevForm.map(row => ({
+      ...row,
+      elements: row.elements.map(el => 
+        el.id === element.id ? element : el
+      )
+    })))
   }
   
   const addNewRow = () => {
@@ -227,7 +236,7 @@ const handleSavedForm = () => {
               className="text-lg font-bold border-none bg-transparent"
               placeholder="Enter Form Name"
             />
-            <Button onClick={addNewRow} className="flex items-center">
+            <Button onClick={addNewRow} className="flex items-center mr-4">
               <PlusCircle className="mr-2 h-4 w-4" /> Add Row
             </Button>
             <XmlUploadModal onUpload={handleXmlUpload} />
