@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { PlusCircle } from 'lucide-react'
+import { Code, PlusCircle } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 import { XmlUploadModal } from './XmlUploadModal'
 import { FormElementSettingsModal } from './FormElementSettingsModal'
@@ -233,7 +233,7 @@ const handleSavedForm = () => {
               id="FormName"
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
-              className="text-lg font-bold border-none bg-transparent"
+              className="text-lg font-bold border-dashed bg-transparent"
               placeholder="Enter Form Name"
             />
             <Button onClick={addNewRow} className="flex items-center mr-4">
@@ -272,7 +272,9 @@ const handleSavedForm = () => {
               )}
             </Droppable>
           ))}
-          <Button className="mt-4" onClick={handleSavedForm}>Save Form</Button>
+          <div className='flex justify-end'>
+            <Button className="mt-4" onClick={handleSavedForm}><Code className="mr-2 h-4 w-4"/> Generate XML</Button>
+          </div>
           {savedForm && <CodeZone data={savedForm} title={formName}/>}
         </div>
       </div>
