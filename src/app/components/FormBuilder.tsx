@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { PlusCircle } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
+import { XmlUploadModal } from './XmlUploadModal'
 
 const initialFormElements = [
   { id: 'input', type: 'onebox', label: 'Text' },
@@ -185,6 +186,10 @@ const handleSavedForm = () => {
     })))
   }
 
+  const handleXmlUpload = (jsonForm: FormRow[]) => {
+    setForm(jsonForm)
+  }
+  
   const addNewRow = () => {
     setForm(prevForm => [...prevForm, { id: `row-${Date.now()}`, elements: [] }])
   }
@@ -228,6 +233,7 @@ const handleSavedForm = () => {
             <Button onClick={addNewRow} className="flex items-center">
               <PlusCircle className="mr-2 h-4 w-4" /> Add Row
             </Button>
+            <XmlUploadModal onUpload={handleXmlUpload} />
           </div>
           {form.map((row, rowIndex) => (
             <Droppable key={row.id} droppableId={`row-${rowIndex}`}>
