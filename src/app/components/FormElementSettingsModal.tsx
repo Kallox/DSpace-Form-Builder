@@ -13,14 +13,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { validateXmlStructure } from "@/utils/xmlValidator"
 import { convertXmlToJson } from "@/utils/xmlToJsonConverter"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
-import { FormRow, Form } from '@/types/Form'
+import { AlertCircle, Settings } from "lucide-react"
+import { FormElement, FormRow, Form } from '@/types/Form'
 
 interface XmlUploadModalProps {
-  onUpload: (jsonForm: Form) => void
+  onUpload: (jsonForm: Form) => void,
+  element: FormElement
 }
 
-export function XmlUploadModal({ onUpload }: XmlUploadModalProps) {
+export function FormElementSettingsModal({ onUpload, element }: XmlUploadModalProps) {
   const [xmlContent, setXmlContent] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -34,23 +35,28 @@ export function XmlUploadModal({ onUpload }: XmlUploadModalProps) {
         setXmlContent('');
         setError(null);
       } catch (err) {
-        setError("Error converting XML to JSON. Please check the format." + err);
+        setError("Error al convertir XML a JSON. Por favor, verifica el formato." + err);
       }
     } else {
-      setError("The XML does not have the correct structure. Please check the format.");
+      setError("El XML no tiene la estructura correcta. Por favor, verifica el formato.");
     }
+  }
+
+  const handleElementSettingsClick = () => {
+    console.log("Element settings clicked")
+    console.log(element)
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Upload Form</Button>
+        <Button variant="outline" size="icon" onClick={() => handleElementSettingsClick()}><Settings className="h-4 w-4"/></Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Upload XML Form</DialogTitle>
+          <DialogTitle>Advance input settings</DialogTitle>
           <DialogDescription>
-            Paste your XML code into the text field below.
+            Configure optional input fields
           </DialogDescription>
         </DialogHeader>
         <Textarea
@@ -59,7 +65,7 @@ export function XmlUploadModal({ onUpload }: XmlUploadModalProps) {
             setXmlContent(e.target.value)
             setError(null)
           }}
-          placeholder="Paste your XML code here"
+          placeholder="Pega tu código XML aquí"
           className="min-h-[200px]"
         />
         {error && (
@@ -70,7 +76,7 @@ export function XmlUploadModal({ onUpload }: XmlUploadModalProps) {
           </Alert>
         )}
         <DialogFooter>
-          <Button onClick={handleUpload}>Upload</Button>
+          <Button onClick={handleUpload}>Subir</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

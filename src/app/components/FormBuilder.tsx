@@ -9,7 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { PlusCircle } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 import { XmlUploadModal } from './XmlUploadModal'
-import { FormElement, FormRow } from '@/types/Form'
+import { FormElementSettingsModal } from './FormElementSettingsModal'
+import { FormElement, FormRow, Form } from '@/types/Form'
 
 const initialFormElements = [
   { id: 'input', type: 'onebox', label: 'Text' },
@@ -47,7 +48,15 @@ export default function EnhancedFormBuilder() {
         inputType: baseElement ? baseElement.type : '',
         repeatable: false,
         required: '',
-        hint: ''
+        hint: '',
+        style: '',
+        typeBind: '',
+        regex: '',
+        vocabulary: '',
+        vocabularyClosed: false,
+        visibility: true,
+        readonly: false,
+        valuePairsName: ''
       }
       
       const rowIndex = parseInt(destination.droppableId.split('-')[1])
@@ -148,6 +157,9 @@ export default function EnhancedFormBuilder() {
               placeholder="Hint"
             />
           </div>
+          <div className="flex items-center space-x-2">
+            <FormElementSettingsModal onUpload={handleXmlUpload} element={element}/>
+          </div>
         </div>
       </div>
     )
@@ -170,10 +182,15 @@ const handleSavedForm = () => {
     })))
   }
 
-  const handleXmlUpload = (jsonForm: FormRow[]) => {
-    setForm(jsonForm)
+  const handleXmlUpload = (jsonForm: Form) => {
+    setForm(jsonForm.rows)
+    setFormName(jsonForm.name)
   }
   
+  const handleElementSettingsClick = (element: FormElement) => {
+    console.log('Settings clicked', element)
+  }
+
   const addNewRow = () => {
     setForm(prevForm => [...prevForm, { id: `row-${Date.now()}`, elements: [] }])
   }
@@ -181,7 +198,7 @@ const handleSavedForm = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex h-screen">
-        <div className="w-1/5 bg-gray-100 p-4">
+        <div className="w-1/6 bg-gray-100 p-4">
           <h2 className="text-lg font-bold mb-4">Form Elements</h2>
           <Droppable droppableId="elements" isDropDisabled={true}>
             {(provided) => (
@@ -205,7 +222,7 @@ const handleSavedForm = () => {
             )}
           </Droppable>
         </div>
-        <div className="w-4/5 p-4">
+        <div className="w-5/6 p-4">
           <div className="flex justify-between items-center mb-4">
             <Input
               id="FormName"

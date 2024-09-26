@@ -22,3 +22,8 @@ export interface FormRow {
     id: string;
     elements: FormElement[];
   }
+
+export interface Form {
+    name: string;
+    rows: FormRow[];
+}
