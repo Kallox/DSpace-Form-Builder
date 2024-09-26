@@ -10,7 +10,7 @@ export function validateXmlStructure(xmlString: string): boolean {
 
   // Verificar la estructura básica
   const form = xmlDoc.getElementsByTagName("form")[0];
-  if (!form || form.getAttribute("name") !== "bitstream-metadata") {
+  if (!form || !form.getAttribute("name")) {
     return false;
   }
 
@@ -33,16 +33,16 @@ export function validateXmlStructure(xmlString: string): boolean {
   }
 
   // Verificar valores específicos
-  if (field.getElementsByTagName("dc-schema")[0].textContent !== "dc") {
+  if (!field.getElementsByTagName("dc-schema")[0]) {
     return false;
   }
-  if (field.getElementsByTagName("dc-element")[0].textContent !== "title") {
+  if (!field.getElementsByTagName("dc-element")[0]) {
     return false;
   }
-  if (field.getElementsByTagName("input-type")[0].textContent !== "onebox") {
+  if (!field.getElementsByTagName("input-type")[0]) {
     return false;
   }
-  if (field.getElementsByTagName("repeatable")[0].textContent !== "false") {
+  if (!field.getElementsByTagName("repeatable")[0]) {
     return false;
   }
 
