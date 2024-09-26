@@ -14,23 +14,7 @@ import { validateXmlStructure } from "@/utils/xmlValidator"
 import { convertXmlToJson } from "@/utils/xmlToJsonConverter"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
-
-interface FormElement {
-  id: string;
-  schema: string;
-  element: string;
-  qualifier: string;
-  label: string;
-  inputType: string;
-  repeatable: boolean;
-  required: string;
-  hint: string;
-}
-
-interface FormRow {
-  id: string;
-  elements: FormElement[];
-}
+import { FormRow } from '@/types/Form'
 
 interface XmlUploadModalProps {
   onUpload: (jsonForm: FormRow[]) => void

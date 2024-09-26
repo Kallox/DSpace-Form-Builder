@@ -1,19 +1,4 @@
-interface FormElement {
-  id: string;
-  schema: string;
-  element: string;
-  qualifier: string;
-  label: string;
-  inputType: string;
-  repeatable: boolean;
-  required: string;
-  hint: string;
-}
-
-interface FormRow {
-  id: string;
-  elements: FormElement[];
-}
+import { FormElement, FormRow } from "@/types/Form";
 
 export function convertXmlToJson(xmlString: string): FormRow[] {
   const parser = new DOMParser();

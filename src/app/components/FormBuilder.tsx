@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { PlusCircle } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 import { XmlUploadModal } from './XmlUploadModal'
+import { FormElement, FormRow } from '@/types/Form'
 
 const initialFormElements = [
   { id: 'input', type: 'onebox', label: 'Text' },
@@ -23,23 +24,6 @@ const initialFormElements = [
   { id: 'series', type: 'series', label: 'Publication Series' },
 
 ]
-
-interface FormElement {
-  id: string;
-  schema: string;
-  element: string;
-  qualifier: string;
-  label: string
-  inputType: string;
-  repeatable: boolean;
-  required: string;
-  hint: string;
-}
-
-interface FormRow {
-  id: string;
-  elements: FormElement[];
-}
 
 export default function EnhancedFormBuilder() {
   const [form, setForm] = useState<FormRow[]>([])

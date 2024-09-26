@@ -2,23 +2,7 @@ import React from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from './CopyButton'
-
-interface FormElement {
-  id: string;
-  schema: string;
-  element: string;
-  qualifier: string;
-  label: string
-  inputType: string;
-  repeatable: boolean;
-  required: string;
-  hint: string;
-}
-
-interface FormRow {
-  id: string;
-  elements: FormElement[];
-}
+import { FormRow } from '@/types/Form'
 
 interface JSONViewerProps {
   data: FormRow[];
