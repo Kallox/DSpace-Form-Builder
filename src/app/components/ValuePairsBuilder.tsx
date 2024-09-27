@@ -98,7 +98,6 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
 
   const handleGenerateXML = () => {
     setSavedValuePairs(valuePairGroups)
-    console.log(valuePairGroups)
   }
 
   const handleXmlUpload = (jsonForm: ValuePairGroup) => {
