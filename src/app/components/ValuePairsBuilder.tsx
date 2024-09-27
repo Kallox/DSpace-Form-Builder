@@ -85,6 +85,12 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
     onValuePairsChange(newGroups)
   }
 
+  const handleRemoveGroup = (groupId: string) => {
+    const newGroups = valuePairGroups.filter(group => group.id !== groupId)
+    setSavedValuePairs(null)
+    onValuePairsChange(newGroups)
+  }
+
   const handleSelectedGroupId = (groupId: string) => {
     setSavedValuePairs(null)
     setSelectedGroupId(groupId)
@@ -114,10 +120,11 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
           {valuePairGroups.map(group => (
             <div 
               key={group.id} 
-              className={`p-2 rounded cursor-pointer ${selectedGroupId === group.id ? 'bg-blue-100' : 'bg-white'}`}
+              className={`p-2 rounded cursor-pointer flex justify-between content-center ${selectedGroupId === group.id ? 'bg-blue-100' : 'bg-white'}`}
               onClick={() => handleSelectedGroupId(group.id)}
             >
               {group.name}
+              <Button variant="destructive" className="flex items-center" onClick={() => handleRemoveGroup(group.id)}><Trash2 className="h-4 w-4" /></Button>
             </div>
           ))}
         </div>

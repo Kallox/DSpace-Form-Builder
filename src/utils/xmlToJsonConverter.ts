@@ -1,5 +1,5 @@
 import { FormElement, FormRow, Form } from "@/types/Form";
-import { ValuePair, ValuePairGroup } from "@/types/ValuePairs";
+import { ValuePairGroup } from "@/types/ValuePairs";
 
 export function convertXmlToJson(xmlString: string): Form {
   const parser = new DOMParser();
