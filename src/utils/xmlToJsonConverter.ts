@@ -1,4 +1,5 @@
 import { FormElement, FormRow, Form } from "@/types/Form";
+import { ValuePair, ValuePairGroup } from "@/types/ValuePairs";
 
 export function convertXmlToJson(xmlString: string): Form {
   const parser = new DOMParser();
@@ -55,4 +56,27 @@ export function convertXmlToJson(xmlString: string): Form {
   }
 
   return jsonFormObject;
+}
+
+export function convertValuePairsXmlToJson(xmlString: string): ValuePairGroup {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+  const valuePairs = xmlDoc.getElementsByTagName("value-pairs")[0];
+  const valuePairsName = valuePairs.getAttribute("value-pairs-name");
+  const pairs = valuePairs.getElementsByTagName("pair");
+
+  const jsonValuePairs: ValuePairGroup = {
+    id: `group-${Date.now()}`,
+    name: valuePairsName || "Value Pairs",
+    pairs: Array.from(pairs).map((pair, pairIndex) => {
+      return {
+        id: `pair-${pairIndex}`,
+        displayedValue: pair.getElementsByTagName("displayed-value")[0].textContent || "",
+        storedValue: pair.getElementsByTagName("stored-value")[0].textContent || ""
+      };
+    })
+  };
+
+  return jsonValuePairs;
 }

@@ -48,3 +48,35 @@ export function validateXmlStructure(xmlString: string): boolean {
 
   return true;
 }
+
+export function validateXmlValuePairsStructure (xmlString: string): boolean {
+  // Crear un parser XML
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+  // Verificar si hay errores de parsing
+  if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+    return false;
+  }
+
+  // Verificar la estructura básica
+  const valuePairs = xmlDoc.getElementsByTagName("value-pairs")[0];
+  if (!valuePairs) {
+    return false;
+  }
+
+  const pair = valuePairs.getElementsByTagName("pair")[0];
+  if (!pair) {
+    return false;
+  }
+
+  // Verificar los elementos requeridos dentro de pair
+  const requiredElements = ["displayed-value", "stored-value"];
+  for (const elementName of requiredElements) {
+    if (!pair.getElementsByTagName(elementName)[0]) {
+      return false;
+    }
+  }
+
+  return true;
+}

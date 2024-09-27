@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Code, PlusCircle, Trash2 } from 'lucide-react'
 import { ValuePairGroup } from '@/types/ValuePairs'
 import { CodeZone } from './CodeZone'
+import { ValuePairsXmlUploadModal } from './ValuePairsXmlUploadModal'
 
 interface ValuePairsBuilderProps {
   valuePairGroups: ValuePairGroup[];
@@ -91,6 +92,12 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
 
   const handleGenerateXML = () => {
     setSavedValuePairs(valuePairGroups)
+    console.log(valuePairGroups)
+  }
+
+  const handleXmlUpload = (jsonForm: ValuePairGroup) => {
+    setSavedValuePairs(null)
+    onValuePairsChange([...valuePairGroups, jsonForm])
   }
 
   return (
@@ -101,6 +108,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
           <Button onClick={addValuePairGroup} className="flex items-center">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Group
           </Button>
+          <ValuePairsXmlUploadModal onUpload={handleXmlUpload} />
         </div>
         <div className="space-y-2 mb-4">
           {valuePairGroups.map(group => (
