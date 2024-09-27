@@ -4,8 +4,9 @@ import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { PlusCircle, Trash2 } from 'lucide-react'
+import { Code, PlusCircle, Trash2 } from 'lucide-react'
 import { ValuePairGroup } from '@/types/ValuePairs'
+import { CodeZone } from './CodeZone'
 
 interface ValuePairsBuilderProps {
   valuePairGroups: ValuePairGroup[];
@@ -14,6 +15,7 @@ interface ValuePairsBuilderProps {
 
 export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange }: ValuePairsBuilderProps) {
   const [selectedGroupId, setSelectedGroupId] = React.useState<string | null>(null)
+  const [savedValuePairs, setSavedValuePairs] = React.useState<ValuePairGroup[] | null>(null)
 
   const addValuePairGroup = () => {
     const newGroup: ValuePairGroup = {
@@ -77,6 +79,11 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
     onValuePairsChange(newGroups)
   }
 
+  const handleGenerateXML = () => {
+    setSavedValuePairs(valuePairGroups)
+    console.log(savedValuePairs)
+  }
+
   return (
     <div className="flex h-full">
       <div className="w-1/3 bg-gray-100 p-4 overflow-y-auto">
@@ -86,7 +93,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
             <PlusCircle className="mr-2 h-4 w-4" /> Add Group
           </Button>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 mb-4">
           {valuePairGroups.map(group => (
             <div 
               key={group.id} 
@@ -96,6 +103,12 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
               {group.name}
             </div>
           ))}
+        </div>
+        <div className="flex justify-end">
+          {
+            valuePairGroups.length !== 0 && 
+            <Button className="mt-4" onClick={handleGenerateXML}><Code className="mr-2 h-4 w-4"/> Generate XML</Button>
+          }
         </div>
       </div>
       <div className="w-2/3 p-4 overflow-y-auto">
@@ -155,6 +168,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
                     </Button>
                   </div>
                 ))}
+                {savedValuePairs && <CodeZone data={savedValuePairs} title=""/>}
               </>
             )}
           </div>

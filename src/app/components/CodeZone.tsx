@@ -3,13 +3,14 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from './CopyButton'
 import { FormRow } from '@/types/Form'
+import { ValuePairGroup } from '@/types/ValuePairs'
 
 interface JSONViewerProps {
-  data: FormRow[];
+  data: FormRow[] | ValuePairGroup[];
   title: string;
 }
 
-const jsonToXml = (json: FormRow[], title: string): string => {
+const formJsonToXml = (json: FormRow[] | ValuePairGroup[], title: string): string => {
   let xml = ''
   xml += `<form name="${title}">\n`
   for (const key in json) {
@@ -57,12 +58,29 @@ const jsonToXml = (json: FormRow[], title: string): string => {
   return xml
 }
 
+const pairJsonToXml = (json: FormRow[] | ValuePairGroup[]): string => {
+  let xml = ''
+  for (const key in json) {
+    const name = json[key]['name']
+    xml += `<value-pairs value-pairs-name="${name}" dc-term="${name}">\n`
+    for (const innerKey in json[key]['pairs']) {
+      xml += `\t<pair>\n`
+      xml += `\t\t<displayed-value>${json[key]['pairs'][innerKey]['displayedValue']}</displayed-value>\n`
+      xml += `\t\t<stored-value>${json[key]['pairs'][innerKey]['storedValue']}</stored-value>\n`
+      xml += `\t</pair>\n`
+    }
+    xml += `</value-pairs>\n`
+  }
+  return xml
+}
+
 export function CodeZone({ data, title }: JSONViewerProps) {
-  const xml = jsonToXml(data, title)
+  const dataType = data[0].hasOwnProperty('elements') ? 'form' : 'value-pairs'
+  const xml = dataType === "form" ? formJsonToXml(data, title) : pairJsonToXml(data)
 
   return (
     <div className="mt-4">
-      <h2 className="text-lg font-bold mb-2">Form XML</h2>
+      <h2 className="text-lg font-bold mb-2">XML Code</h2>
       <div className="border rounded overflow-hidden relative">
         <CopyButton code={xml} />
         <SyntaxHighlighter language="xml" style={vscDarkPlus} customStyle={{margin: 0}} showLineNumbers>
