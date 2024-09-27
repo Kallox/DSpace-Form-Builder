@@ -77,7 +77,7 @@ const pairJsonToXml = (json: FormRow[] | ValuePairGroup[]): string => {
 export function CodeZone({ data, title }: JSONViewerProps) {
   const dataType = data[0].hasOwnProperty('elements') ? 'form' : 'value-pairs'
   const xml = dataType === "form" ? formJsonToXml(data, title) : pairJsonToXml(data)
-
+  
   return (
     <div className="mt-4">
       <h2 className="text-lg font-bold mb-2">XML Code</h2>

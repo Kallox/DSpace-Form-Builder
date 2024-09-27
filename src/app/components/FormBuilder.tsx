@@ -67,6 +67,7 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
       const rowIndex = parseInt(destination.droppableId.split('-')[1])
       const newForm = [...form]
       newForm[rowIndex].elements.splice(destination.index, 0, newElement)
+      setSavedForm(null)
       onFormChange(newForm)
     } else if (source.droppableId.startsWith('row') && destination.droppableId.startsWith('row')) {
       const sourceRowIndex = parseInt(source.droppableId.split('-')[1])
@@ -77,6 +78,7 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
       newForm[destRowIndex].elements.splice(destination.index, 0, movedElement)
       
       // Remove empty rows
+      setSavedForm(null)
       onFormChange(newForm.filter(row => row.elements.length > 0))
     }
   }
@@ -171,12 +173,18 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
   }
 
   const handleElementClick = (element: FormElement) => {
+    setSavedForm(null)
     setSelectedElement(element)
   }
 
-const handleSavedForm = () => {
-  setSavedForm([...form])
-}
+  const handleSavedForm = () => {
+    setSavedForm([...form])
+  }
+
+  const handleFormNameChange = (newName: string) => {
+    setSavedForm(null)
+    onFormNameChange(newName)
+  }
 
   const handlePropertyChange = (elementId: string, property: string, value: string | boolean) => {
     const newForm = form.map(row => ({
@@ -185,10 +193,12 @@ const handleSavedForm = () => {
         el.id === elementId ? { ...el, [property]: value } : el
       )
     }))
+    setSavedForm(null)
     onFormChange(newForm)
   }
 
   const handleXmlUpload = (jsonForm: Form) => {
+    setSavedForm(null)
     onFormChange(jsonForm.rows)
     onFormNameChange(jsonForm.name)
   }
@@ -200,10 +210,12 @@ const handleSavedForm = () => {
         el.id === element.id ? element : el
       )
     }))
+    setSavedForm(null)
     onFormChange(newForm)
   }
   
   const addNewRow = () => {
+    setSavedForm(null)
     onFormChange([...form, { id: `row-${Date.now()}`, elements: [] }])
   }
 
@@ -239,7 +251,7 @@ const handleSavedForm = () => {
             <Input
               id="FormName"
               value={formName}
-              onChange={(e) => onFormNameChange(e.target.value)}
+              onChange={(e) => handleFormNameChange(e.target.value)}
               className="text-lg font-bold border-dashed bg-transparent"
               placeholder="Enter Form Name"
             />
@@ -280,9 +292,13 @@ const handleSavedForm = () => {
             </Droppable>
           ))}
           <div className='flex justify-end'>
-            <Button className="mt-4" onClick={handleSavedForm}><Code className="mr-2 h-4 w-4"/> Generate XML</Button>
+            {
+              form?.length !== 0 && <Button className="mt-4" onClick={handleSavedForm}><Code className="mr-2 h-4 w-4"/> Generate XML</Button>
+            }
           </div>
-          {savedForm && <CodeZone data={savedForm} title={formName}/>}
+          {
+            savedForm && <CodeZone data={savedForm} title={formName} />
+          }
         </div>
       </div>
     </DragDropContext>

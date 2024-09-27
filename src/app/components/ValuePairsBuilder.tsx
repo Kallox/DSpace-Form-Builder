@@ -27,6 +27,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
         storedValue: ''
       }]
     }
+    setSavedValuePairs(null)
     onValuePairsChange([...valuePairGroups, newGroup])
     setSelectedGroupId(newGroup.id)
   }
@@ -35,6 +36,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
     const newGroups = valuePairGroups.map(group =>
       group.id === groupId ? { ...group, name: newName } : group
     )
+    setSavedValuePairs(null)
     onValuePairsChange(newGroups)
   }
 
@@ -50,6 +52,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
           }
         : group
     )
+    setSavedValuePairs(null)
     onValuePairsChange(newGroups)
   }
 
@@ -64,6 +67,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
           }
         : group
     )
+    setSavedValuePairs(null)
     onValuePairsChange(newGroups)
   }
 
@@ -76,12 +80,17 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
           }
         : group
     )
+    setSavedValuePairs(null)
     onValuePairsChange(newGroups)
+  }
+
+  const handleSelectedGroupId = (groupId: string) => {
+    setSavedValuePairs(null)
+    setSelectedGroupId(groupId)
   }
 
   const handleGenerateXML = () => {
     setSavedValuePairs(valuePairGroups)
-    console.log(savedValuePairs)
   }
 
   return (
@@ -98,7 +107,7 @@ export default function ValuePairsBuilder({ valuePairGroups, onValuePairsChange 
             <div 
               key={group.id} 
               className={`p-2 rounded cursor-pointer ${selectedGroupId === group.id ? 'bg-blue-100' : 'bg-white'}`}
-              onClick={() => setSelectedGroupId(group.id)}
+              onClick={() => handleSelectedGroupId(group.id)}
             >
               {group.name}
             </div>
