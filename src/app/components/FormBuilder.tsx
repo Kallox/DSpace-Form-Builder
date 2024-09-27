@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Code, PlusCircle } from 'lucide-react'
+import { Code, PlusCircle, ChevronUp, ChevronDown } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 import { XmlUploadModal } from './XmlUploadModal'
 import { FormElementSettingsModal } from './FormElementSettingsModal'
@@ -219,6 +219,28 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
     onFormChange([...form, { id: `row-${Date.now()}`, elements: [] }])
   }
 
+  const moveRowUp = (index: number) => {
+    if (index > 0) {
+      const newForm = [...form]
+      const temp = newForm[index]
+      newForm[index] = newForm[index - 1]
+      newForm[index - 1] = temp
+      setSavedForm(null)
+      onFormChange(newForm)
+    }
+  }
+
+  const moveRowDown = (index: number) => {
+    if (index < form.length - 1) {
+      const newForm = [...form]
+      const temp = newForm[index]
+      newForm[index] = newForm[index + 1]
+      newForm[index + 1] = temp
+      setSavedForm(null)
+      onFormChange(newForm)
+    }
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex h-screen">
@@ -265,6 +287,28 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
               {(provided) => (
                 <div className="relative min-h-[100px] border-2 border-dashed p-4 mb-4">
                   <span className="absolute top-0 left-0 bg-gray-200 text-xs px-2 py-1 rounded-br">Row</span>
+                  <div className="absolute top-0 right-0 flex">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => moveRowUp(rowIndex)}
+                      disabled={rowIndex === 0}
+                      className="h-6 w-6"
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                      <span className="sr-only">Move row up</span>
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => moveRowDown(rowIndex)}
+                      disabled={rowIndex === form.length - 1}
+                      className="h-6 w-6"
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                      <span className="sr-only">Move row down</span>
+                    </Button>
+                  </div>
                   <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
