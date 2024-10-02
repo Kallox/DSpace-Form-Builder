@@ -17,9 +17,10 @@ interface FormBuilderProps {
   formName: string;
   onFormChange: (newForm: FormRow[]) => void;
   onFormNameChange: (newName: string) => void;
+  onFormUpload: (jsonForm: Form) => void;
 }
 
-export default function EnhancedFormBuilder({ form, formName, onFormChange, onFormNameChange }: FormBuilderProps) {
+export default function EnhancedFormBuilder({ form, formName, onFormChange, onFormNameChange, onFormUpload }: FormBuilderProps) {
   const [selectedElement, setSelectedElement] = useState<FormElement | null>(null)
   const [savedForm, setSavedForm] = useState<FormRow[] | null>(null)
 
@@ -158,8 +159,7 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
 
   const handleXmlUpload = (jsonForm: Form) => {
     setSavedForm(null)
-    onFormChange(jsonForm.rows)
-    onFormNameChange(jsonForm.name)
+    onFormUpload(jsonForm)
   }
 
   const handleElementSettingsSave = (element: FormElement) => {

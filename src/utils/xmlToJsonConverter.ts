@@ -51,10 +51,11 @@ export function convertXmlToJson(xmlString: string): Form {
   });
 
   const jsonFormObject = {
+    id: `form-${Date.now()}`,
     name: formName || "Form",
     rows: jsonForm
   }
-
+  
   return jsonFormObject;
 }
 
