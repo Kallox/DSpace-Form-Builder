@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import FormList from "./components/FormList"
 import ValuePairsBuilder from "./components/ValuePairsBuilder"
+import XmlFileUploadModal from "./components/XmlFileUploadModal"
 import { Form } from '@/types/Form'
 import { ValuePairGroup } from '@/types/ValuePairs'
 import Link from 'next/link'
@@ -45,7 +46,10 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4 pt-0">
       <header className="flex justify-between bg-gray-100 p-4 align-middle">
-        <h1 className="text-2xl font-bold">Form Builder</h1>
+        <div className="inline-flex">
+          <h1 className="text-2xl font-bold">Form Builder</h1>
+          <XmlFileUploadModal updateForms={setForms} updateValuePairs={(newValuePairGroups) => setValuePairsBuilderState({ valuePairGroups: newValuePairGroups })}/>
+        </div>
         <Button size="icon" className="rounded-full">
           <Link href="https://github.com/Kallox/DSpace-Form-Builder" target="_blank">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-github-filled" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">

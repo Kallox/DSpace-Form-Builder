@@ -62,7 +62,7 @@ export default function FormList({ forms, onAddForm, onUpdateForm, onDeleteForm 
         <ul className="space-y-2">
           {forms.map((form) => (
             <li key={form.id} className={`p-2 rounded cursor-pointer flex justify-between content-center ${selectedFormId === form.id ? 'bg-blue-100' : 'bg-white'}`} onClick={() => handleSelectForm(form.id)}>
-              <span>{form.name}</span>
+              <span className="break-all">{form.name}</span>
               <Button variant="destructive" className="flex items-center" onClick={() => handleDeleteForm(form.id)}><Trash2 className="h-4 w-4" /></Button>
             </li>
           ))}
