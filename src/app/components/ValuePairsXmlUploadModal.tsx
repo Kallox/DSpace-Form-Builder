@@ -44,7 +44,7 @@ export function ValuePairsXmlUploadModal({ onUpload }: XmlUploadModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button><FileUp className="h-4 h-4 mr-2"/>Upload Value Pairs</Button>
+        <Button><FileUp className="h-4 w-4 mr-2"/>Upload Value Pairs</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
