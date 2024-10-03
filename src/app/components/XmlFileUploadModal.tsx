@@ -5,6 +5,7 @@ import { validateXmlFileStructure } from '@/utils/xmlValidator'
 import { convertXmlFileToJson } from '@/utils/xmlToJsonConverter'
 import { Form } from "@/types/Form"
 import { ValuePairGroup } from "@/types/ValuePairs"
+import { FileUp } from "lucide-react"
 
 interface XmlFileUploadModalProps {
     updateForms: (jsonForm: Form[]) => void
@@ -22,20 +23,20 @@ export default function XmlFileUploadModal({ updateForms, updateValuePairs }: Xm
         updateForms(jsonFile.forms)
         updateValuePairs(jsonFile.valuePairs)
       } else {
-        alert("El archivo XML seleccionado no tiene la estructura correcta. Por favor, revisa el formato.")
+        alert("The XML does not have the correct structure. Please check the format..")
       }
     } else {
-      alert("Por favor, selecciona un archivo XML válido.")
+      alert("Select a valid XML file.")
     }
   }
 
   return (
-    <div className="space-y-4 w-full max-w-md mx-auto p-4">
+    <div className="space-y-4 w-full max-w-md mx-auto">
       <Button
         onClick={() => document.getElementById('fileInput')?.click()}
-        className="w-full"
+        className="w-[200px]"
       >
-        Seleccionar archivo XML
+        <FileUp className="h-4 w-4 mr-2"/>Upload XML file
       </Button>
       <input
         id="fileInput"

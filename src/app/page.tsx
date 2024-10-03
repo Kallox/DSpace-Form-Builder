@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4 pt-0">
       <header className="flex justify-between bg-gray-100 p-4 align-middle">
-        <div className="inline-flex">
+        <div className="inline-flex gap-1 w-[700px]">
           <h1 className="text-2xl font-bold">Form Builder</h1>
           <XmlFileUploadModal updateForms={setForms} updateValuePairs={(newValuePairGroups) => setValuePairsBuilderState({ valuePairGroups: newValuePairGroups })}/>
         </div>
