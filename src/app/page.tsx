@@ -8,6 +8,7 @@ import XmlFileUploadModal from "./components/XmlFileUploadModal"
 import { Form } from '@/types/Form'
 import { ValuePairGroup } from '@/types/ValuePairs'
 import Link from 'next/link'
+import { GenerateXmlButton } from './components/GenerateXmlButton'
 
 export default function Home() {
   const [activeBuilder, setActiveBuilder] = useState<'forms' | 'valuePairs'>('forms')
@@ -49,6 +50,7 @@ export default function Home() {
         <div className="inline-flex gap-1 w-[700px]">
           <h1 className="text-2xl font-bold">Form Builder</h1>
           <XmlFileUploadModal updateForms={setForms} updateValuePairs={(newValuePairGroups) => setValuePairsBuilderState({ valuePairGroups: newValuePairGroups })}/>
+          <GenerateXmlButton forms={forms} valuePairs={valuePairsBuilderState.valuePairGroups}/>
         </div>
         <Button size="icon" className="rounded-full">
           <Link href="https://github.com/Kallox/DSpace-Form-Builder" target="_blank">
