@@ -43,9 +43,9 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <header className="flex justify-between">
-        <h1 className="text-2xl font-bold mb-4">Form Builder</h1>
+    <div className="container mx-auto p-4 pt-0">
+      <header className="flex justify-between bg-gray-100 p-4 align-middle">
+        <h1 className="text-2xl font-bold">Form Builder</h1>
         <Button size="icon" className="rounded-full">
           <Link href="https://github.com/Kallox/DSpace-Form-Builder" target="_blank">
             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-brand-github-filled" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -55,7 +55,7 @@ export default function Home() {
           </Link>
         </Button>
       </header>
-      <div className="flex space-x-4 mb-4">
+      <div className="flex space-x-4 mb-4 pt-4">
         <Button
           onClick={() => setActiveBuilder('forms')}
           variant={activeBuilder === 'forms' ? 'default' : 'outline'}

@@ -54,7 +54,7 @@ export default function FormList({ forms, onAddForm, onUpdateForm, onDeleteForm 
     <div className="flex h-full">
       <div className="w-1/6 bg-gray-100 p-4 overflow-y-auto space-y-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold mb-2">Your Forms</h2>
+          <h2 className="text-xl font-semibold mb-2">Forms</h2>
           <Button onClick={onAddForm} className="flex items-center">
             <PlusCircle className="h-4 w-4" /> Add Form
           </Button>
