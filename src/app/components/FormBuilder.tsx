@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import InputTypeSelect from "./InputTypeSelect"
 import { Code, PlusCircle, ChevronUp, ChevronDown } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 import { XmlUploadModal } from './XmlUploadModal'
@@ -89,13 +90,10 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
           </div>
           <div className="flex-1 min-w-[120px]">
             <Label htmlFor={`${element.id}-inputType`} className="sr-only">Input Type</Label>
-            <Input
-              id={`${element.id}-inputType`}
+            <InputTypeSelect 
+              id={`${element.id}-inputType`} 
               value={element.inputType}
-              onChange={(e) => handlePropertyChange(element.id, 'inputType', e.target.value)}
-              className="w-full"
-              placeholder="Input Type"
-            />
+              onChange={(value) => handlePropertyChange(element.id, 'inputType', value)}/>
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -185,7 +183,7 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
       element: '',
       qualifier: '',
       label: '',
-      inputType: '',
+      inputType: 'one box',
       repeatable: false,
       required: '',
       hint: '',
