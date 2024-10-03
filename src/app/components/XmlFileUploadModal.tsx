@@ -31,7 +31,7 @@ export default function XmlFileUploadModal({ updateForms, updateValuePairs }: Xm
   }
 
   return (
-    <div className="space-y-4 w-full max-w-md mx-auto">
+    <div className="space-y-4 max-w-md">
       <Button
         onClick={() => document.getElementById('fileInput')?.click()}
         className="w-[200px]"

@@ -117,7 +117,7 @@ export function GenerateXmlButton({ forms, valuePairs }: GenerateXmlButtonProps)
   
   return (
     <Button onClick={() => handleDownload(forms, valuePairs)}>
-      <Download className="mr-2 h-4 w-4" /> Descargar XML
+      <Download className="mr-2 h-4 w-4" /> Download XML
     </Button>
   )
 }
