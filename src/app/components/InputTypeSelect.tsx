@@ -25,6 +25,7 @@ export default function InputTypeSelect({ id, value, onChange }: InputTypeSelect
                 <SelectItem value="name">Name</SelectItem>
                 <SelectItem value="link">Link</SelectItem>
                 <SelectItem value="series">Series</SelectItem>
+                <SelectItem value="qualdrop_value">Qualdrop Value</SelectItem>
             </SelectContent>
         </Select>
     )
