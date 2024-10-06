@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import InputTypeSelect from "./InputTypeSelect"
-import { Code, PlusCircle, ChevronUp, ChevronDown } from 'lucide-react'
+import { Code, PlusCircle, ChevronUp, ChevronDown, Trash2 } from 'lucide-react'
 import { CodeZone } from "./CodeZone"
 import { XmlUploadModal } from './XmlUploadModal'
 import { FormElementSettingsModal } from './FormElementSettingsModal'
@@ -44,9 +44,20 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
     }
   }
 
-  const renderFormElement = (element: FormElement) => {
+  const renderFormElement = (element: FormElement, rowIndex: number, elementIndex: number) => {
     return (
-      <div className="w-full p-4 border rounded-md bg-white">
+      <div className="relative w-full p-4 border rounded-md bg-white">
+         <div className="absolute top-0 right-0 flex">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={(e) => {e.stopPropagation(); removeElement(rowIndex, elementIndex)}}
+            className="h-4 w-4"
+          >
+            <Trash2 className="h-3 w-3" />
+            <span className="sr-only">Remove element</span>
+          </Button>
+        </div>
         <div className="flex flex-wrap items-center space-x-2">
           <div className="flex-1 min-w-[120px]">
             <Label htmlFor={`${element.id}-schema`} className="sr-only">Schema</Label>
@@ -225,6 +236,21 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
     }
   }
 
+  const removeRow = (index: number) => { 
+    const newForm = [...form]
+    newForm.splice(index, 1)
+    setSavedForm(null)
+    setSavedForm(null)
+    onFormChange(newForm)
+  }
+
+  const removeElement = (rowIndex: number, elementIndex: number) => {
+    const newForm = [...form]
+    newForm[rowIndex].elements.splice(elementIndex, 1)
+    setSavedForm(null)
+    onFormChange(newForm)
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex h-screen">
@@ -268,6 +294,14 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
                       <ChevronDown className="h-4 w-4" />
                       <span className="sr-only">Move row down</span>
                     </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => removeRow(rowIndex)}
+                      className="h-6 w-6">
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Delete row</span>
+                    </Button>
                   </div>
                   <div
                     {...provided.droppableProps}
@@ -284,7 +318,7 @@ export default function EnhancedFormBuilder({ form, formName, onFormChange, onFo
                             onClick={() => handleElementClick(element)}
                             className={`cursor-pointer mt-4 ${selectedElement?.id === element.id ? 'border-2 border-blue-500' : ''}`}
                           >
-                            {renderFormElement(element)}
+                            {renderFormElement(element, rowIndex, index)}
                           </div>
                         )}
                       </Draggable>
