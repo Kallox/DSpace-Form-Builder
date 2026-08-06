@@ -1,13 +1,14 @@
 'use client'
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Copy, Check } from "lucide-react";
 
 type Props = {
   code: string;
 };
-export function CopyButton({ code }: Props) {
 
+export function CopyButton({ code }: Props) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -16,23 +17,23 @@ export function CopyButton({ code }: Props) {
   }
 
   return (
-    <button className="absolute top-2 right-5 bg-white p-1 rounded-lg">
+    <div className="absolute top-2.5 right-3 z-10">
       <CopyToClipboard text={code} onCopy={handleCopy}>
-        <div>
-            { copied ?
-            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-check" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M5 12l5 5l10 -10" />
-            </svg>
-            :
-            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-copy" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
-                <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
-            </svg>
-            }
-        </div>
+        <button 
+          className={`p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center ${
+            copied 
+              ? 'bg-emerald-950/80 text-emerald-400 border-emerald-500/30' 
+              : 'bg-slate-800/80 text-slate-300 border-slate-700/80 hover:bg-slate-750 hover:text-white'
+          }`}
+          title={copied ? "Copied!" : "Copy code"}
+        >
+          {copied ? (
+            <Check className="h-4 w-4 stroke-[2.5]" />
+          ) : (
+            <Copy className="h-4 w-4" />
+          )}
+        </button>
       </CopyToClipboard>
-    </button>
+    </div>
   );
 }

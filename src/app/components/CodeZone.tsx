@@ -4,6 +4,7 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from './CopyButton'
 import { FormRow } from '@/types/Form'
 import { ValuePairGroup } from '@/types/ValuePairs'
+import { FileCode } from 'lucide-react'
 
 interface JSONViewerProps {
   data: FormRow[] | ValuePairGroup[];
@@ -77,15 +78,51 @@ const pairJsonToXml = (json: FormRow[] | ValuePairGroup[]): string => {
 export function CodeZone({ data, title }: JSONViewerProps) {
   const dataType = data[0].hasOwnProperty('elements') ? 'form' : 'value-pairs'
   const xml = dataType === "form" ? formJsonToXml(data, title) : pairJsonToXml(data)
+  const filename = dataType === "form" ? `${title || 'form'}.xml` : 'value-pairs.xml'
   
   return (
-    <div className="mt-4">
-      <h2 className="text-lg font-bold mb-2">XML Code</h2>
-      <div className="border rounded overflow-hidden relative">
-        <CopyButton code={xml} />
-        <SyntaxHighlighter language="xml" style={vscDarkPlus} customStyle={{margin: 0}} showLineNumbers>
-          {xml}
-        </SyntaxHighlighter>
+    <div className="space-y-3 mt-6">
+      <div className="flex items-center gap-2">
+        <FileCode className="h-5 w-5 text-purple-500" />
+        <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+          Generated XML Preview
+        </h3>
+      </div>
+      
+      {/* Editor Mockup Wrapper */}
+      <div className="rounded-xl overflow-hidden border border-slate-700/70 bg-slate-950 shadow-2xl relative">
+        {/* Editor Topbar */}
+        <div className="h-10 px-4 bg-slate-900 border-b border-slate-800/80 flex items-center justify-between select-none">
+          {/* Mock dots */}
+          <div className="flex items-center gap-1.5">
+            <span className="w-3 h-3 rounded-full bg-red-500/80" />
+            <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+            <span className="w-3 h-3 rounded-full bg-green-500/80" />
+          </div>
+          {/* File Label */}
+          <span className="text-xs font-mono text-slate-400 max-w-[200px] truncate">
+            {filename}
+          </span>
+          <div className="w-12" /> {/* spacer balance */}
+        </div>
+
+        {/* Syntax Highlighter Content */}
+        <div className="relative text-sm max-h-[450px] overflow-auto">
+          <CopyButton code={xml} />
+          <SyntaxHighlighter 
+            language="xml" 
+            style={vscDarkPlus} 
+            customStyle={{
+              margin: 0, 
+              background: 'transparent',
+              padding: '1.25rem',
+              fontFamily: 'var(--font-geist-mono), Courier, monospace',
+            }} 
+            showLineNumbers
+          >
+            {xml}
+          </SyntaxHighlighter>
+        </div>
       </div>
     </div>
   )
